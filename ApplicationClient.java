@@ -1,23 +1,38 @@
-package com.dc_app.dcapp_driver.Api;
+package prowebtech.com.discounter.api;
 
-import android.support.multidex.MultiDexApplication;
+import android.app.Application;
+import android.content.Context;
+//import android.support.multidex.MultiDexApplication;
 
-public class ApplicationClient extends MultiDexApplication {
+
+public class ApplicationClient extends Application {
+
     private static ApplicationClient instance;
-    private ApiInterface api;
+    private static ApiInterface api;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        instance=this;
-        api=ApiClient.GetR().create(ApiInterface.class);
+        instance = this;
+        setClient(ApplicationClient.this);
     }
 
-    public ApiInterface getApi() {
-        return api;
+    public static void setClient(Context applicationClient){
+        api = ApiClient.getR(applicationClient).create(ApiInterface.class);
     }
+
+    public static void reSetClient(Context applicationClient){
+        api = ApiClient.resetR(applicationClient).create(ApiInterface.class);
+    }
+
+
 
     public static ApplicationClient getInstance() {
         return instance;
     }
+
+    public static ApiInterface getApi() {
+        return api;
+    }
+
 }
